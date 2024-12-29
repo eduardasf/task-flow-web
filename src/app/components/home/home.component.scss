@@ -1,0 +1,36 @@
+.navBar {
+  width: auto;
+  max-width: max-content;
+  background-color: #568B63;
+  color: #fff;
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding-top: 3rem;
+
+    img {
+      height: 2.5rem;
+    }
+  }
+}
+
+.pagin {
+  height: calc(100dvh - 112px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .p-paginator {
+    background: none;
+
+    .p-paginator-page,
+    .p-paginator-next,
+    .p-paginator-last,
+    .p-paginator-first,
+    .p-paginator-prev {
+      color: #568B63;
+    }
+  }
+}

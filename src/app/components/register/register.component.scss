@@ -1,0 +1,33 @@
+.form_ {
+  width: 100%;
+  font-size: 1.25rem;
+}
+
+.link {
+  color: #44A3DE;
+  font-size: .75rem;
+  cursor: pointer;
+
+  &:hover {
+    color: #2c6a91;
+  }
+}
+
+
+.p-password {
+  width: 100%;
+
+  input {
+    width: 100%;
+  }
+}
+
+section .p-button {
+  padding-inline: 10%;
+  border-color: #568B63;
+  background-color: #568B63;
+  &:hover {
+    border-color: #42724d;
+    background-color: #42724d !important;
+  }
+}

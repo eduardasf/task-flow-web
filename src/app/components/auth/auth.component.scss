@@ -1,0 +1,45 @@
+.auth {
+  background-color: #568B63;
+  background-position: top left;
+  background-size: 33% !important;
+  display: flex;
+  justify-content: end;
+
+
+  .form_part {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .form_login {
+      width: 35%;
+      border-radius: .35rem;
+      color: black;
+      background-color: #E8F2EB;
+
+      .form_ {
+        width: 100%;
+        font-size: 1.25rem;
+      }
+
+      .link {
+        color: #44A3DE;
+        font-size: .75rem;
+        cursor: pointer;
+
+        &:hover {
+          color: #2c6a91;
+        }
+      }
+    }
+  }
+}
+
+.p-password {
+  width: 100%;
+
+  input {
+    width: 100%;
+  }
+}

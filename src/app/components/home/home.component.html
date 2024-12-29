@@ -1,0 +1,47 @@
+<section class="w-full h-full flex">
+  <section class="navBar flex flex-column justify-content-between p-4">
+    <section class=" flex flex-column gap-3">
+      <div class="logo-container">
+        <img src="assets/task.png" alt="Logo">
+        <p class="f-inter m-0 font-semibold text-5xl">TaskFlow</p>
+      </div>
+      <p-divider />
+      <section class="filters">
+        <p-iconfield>
+          <input (input)="changeInput($event)" type="text" pInputText placeholder="Digite para pesquisar" />
+          <p-inputicon styleClass="pi pi-search" />
+        </p-iconfield>
+        <section>
+          <p class="font-semibold text-xl">Filtros de tarefas</p>
+          @for (f of f_status; track $index) {
+          <p [ngClass]="{'font-bold': selected_f === f.type}" class="cursor-pointer" (click)="setFilter(f.type)">
+            {{f.title}}</p>
+          }
+        </section>
+      </section>
+    </section>
+    <section class="text-xl flex flex-column gap-2">
+      <span>
+        <i class="bi bi-person-circle"></i>
+        Perfil
+      </span>
+      <span>
+        <i class="bi bi-arrow-right-square-fill"></i>
+        Sair
+      </span>
+    </section>
+  </section>
+  <section class="content w-full px-4">
+    <section class="flex justify-content-end gap-2 align-items-end">
+      <span class="txt_default text-sm">{{getDate()}}</span>
+      <img src="assets/default.png" class="h-7rem" />
+    </section>
+    <section class="pagin">
+      <section>
+        asdas
+      </section>
+      <p-paginator appendTo="body" (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
+        [totalRecords]="totalRecords" />
+    </section>
+  </section>
+</section>

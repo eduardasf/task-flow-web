@@ -1,1 +1,22 @@
 @import "primeicons/primeicons.css";
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+body {
+  height: 100dvh;
+  width: 100dvw;
+  margin: 0;
+  font-family: "ABeeZee", serif;
+  background-color: #e8f2eb;
+}
+
+label {
+  color: #568B63;
+}
+
+.f-inter {
+  font-family: "Inter", serif;
+}
+
+.txt_default {
+  color: #568B63;
+}

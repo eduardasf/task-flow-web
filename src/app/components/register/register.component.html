@@ -1,0 +1,21 @@
+<form [formGroup]="form">
+  <section class="flex flex-column gap-3">
+    <div class="flex form_ flex-column gap-2">
+      <label for="name">Nome</label>
+      <input pInputText id="name" aria-describedby="username-help" formControlName="name" />
+    </div>
+    <div class="flex form_ flex-column gap-2">
+      <label for="email">Email</label>
+      <input pInputText autocomplete="email" id="email" aria-describedby="username-help" formControlName="email" />
+    </div>
+    <div class="flex form_ flex-column gap-2">
+      <label for="password">Senha</label>
+      <p-password appendTo="body" id="password" autocomplete="password" formControlName="password" [toggleMask]="true"
+        [feedback]="false" />
+      <small [routerLink]="'/login'" id="password" class="link text-right">Já possui cadastro? Faça login</small>
+    </div>
+  </section>
+</form>
+<section class="text-center pt-4">
+  <p-button appendTo="body" (onClick)="login()" label="Cadastrar"/>
+</section>
