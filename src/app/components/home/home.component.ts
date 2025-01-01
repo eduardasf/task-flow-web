@@ -7,8 +7,11 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { debounceTime, Subject, switchMap } from 'rxjs';
-import { PageEvent } from '../../interfaces/primeng';
-import { Tarefa } from '../../interfaces/tarefa';
+
+import { PageEvent } from '@models/primeng';
+import { Tarefa } from '@models/tarefa';
+import { ButtonModule } from 'primeng/button';
+import { ListComponent } from "../tarefas/list/list.component";
 import { HomeService } from './home.service';
 
 @Component({
@@ -20,7 +23,9 @@ import { HomeService } from './home.service';
     InputTextModule,
     FormsModule,
     NgClass,
-    PaginatorModule
+    PaginatorModule,
+    ListComponent,
+    ButtonModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -52,7 +57,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.search(this.value, this.selected_f);
-    
+
     this.searchSubject.pipe(
       debounceTime(500),
       switchMap(({ value, selected_f }) => {
@@ -68,8 +73,9 @@ export class HomeComponent implements OnInit {
         return this.service.getFilteredTarefas(pageEvent);
       })
     ).subscribe((response) => {
-      this.tarefas = response.items;
-      this.totalRecords = response.totalRecords;
+      this.tarefas = response.data;
+      const events = response.pageEvent as PageEvent;
+      this.totalRecords = events.total ?? 0;
       console.log(response);
     });
   }
@@ -101,8 +107,9 @@ export class HomeComponent implements OnInit {
     });
 
     this.service.getFilteredTarefas(pageEvent).subscribe((response) => {
-      this.tarefas = response.items;
-      this.totalRecords = response.totalRecords;
+      this.tarefas = response.data;
+      const events = response.pageEvent as PageEvent;
+      this.totalRecords = events.total ?? 0;
       console.log(response);
     });
   }

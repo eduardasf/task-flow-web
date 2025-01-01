@@ -1,0 +1,34 @@
+<section class="w-full grid-container">
+  @for (t of tarefas; track $index) {
+  <section class="card_ shadow-2">
+    <section class="flex flex-column gap-3">
+      <span class="txt_default text-center text-xl font-semibold" [pTooltip]="t.nome.length > 30 ? t.nome : ''">
+        {{ t.nome.length > 30 ? (t.nome | slice:0:30) + '...' : t.nome }}
+      </span>
+
+      <span class="txt_default">Descrição: <br>
+        <p-scrollpanel [style]="{ width: '100%', height: '100px' }">
+          <p class="m-0 txt_">{{t.descricao}}</p>
+        </p-scrollpanel>
+      </span>
+    </section>
+    <section class="flex flex-column gap-3 ">
+      <span class="txt_default">Data vencimento: <br>
+        <p class="m-0 txt_">{{ t.dataValidade | date: 'dd/MM/yyyy' }}</p>
+      </span>
+      <section>
+        <p-checkbox [(ngModel)]="t.concluido" [binary]="true" (onChange)="active(t.id)" />
+        <label for="ny" class="ml-2">Concluído</label>
+      </section>
+      <section class="actions">
+        <p-button pTooltip="Editar tarefa" size="large" icon="bi bi-pencil-square" [rounded]="true" [text]="true"
+          severity="success" />
+        <p-button pTooltip="Excluir tarefa" size="large" icon="bi bi-trash-fill" [rounded]="true" [text]="true"
+          severity="danger" />
+      </section>
+    </section>
+  </section>
+  } @empty {
+  <p>jkdnfjknjksd</p>
+  }
+</section>

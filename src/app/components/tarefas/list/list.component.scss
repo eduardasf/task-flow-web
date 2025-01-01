@@ -1,0 +1,26 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: auto;
+  gap: 1.5rem;
+  height: calc(100dvh - 210px);
+}
+
+.card_ {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 3px;
+  padding: 1rem;
+  gap: .5rem;
+}
+
+.txt_ {
+  color: black;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
