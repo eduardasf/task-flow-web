@@ -39,7 +39,7 @@
     <section class="pagin">
       <section class="flex h-full flex-column gap-2">
         <p-button icon="pi pi-plus" severity="success" />
-        <app-list [tarefas]="tarefas" />
+        <app-list [tarefas]="tarefas" (notify)="search(value, selected_f)" />
       </section>
       <p-paginator appendTo="body" (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
         [totalRecords]="totalRecords" />
