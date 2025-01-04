@@ -1,0 +1,28 @@
+<div class="modal__ txt_default f-inter">
+  <span class="title font-semibold text-2xl">{{form.controls.id.value ? 'Editar' : 'Adicionar'}} Tarefa</span>
+  <form [formGroup]="form">
+    <section class="flex flex-column gap-3 py-4">
+      <div class="flex form_ flex-column gap-2">
+        <label for="email">Nome</label>
+        <input pInputText autocomplete="email" id="nome" aria-describedby="username-help" formControlName="nome" />
+      </div>
+      <div class="flex form_ flex-column gap-2">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" rows="5" cols="30" pTextarea formControlName="descricao"></textarea>
+      </div>
+      <div class="flex form_ flex-column gap-2">
+        <label for="date">Data validade</label>
+        <p-datepicker dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body" id="date" formControlName="dataValidade"
+          inputId="icondisplay" [iconDisplay]="'input'" styleClass="w-full" />
+      </div>
+      <div class="flex form_ gap-2">
+        <p-checkbox formControlName="concluido" [binary]="true" />
+        <label for="ny" class="ml-2">Concluído</label>
+      </div>
+    </section>
+  </form>
+  <div class="flex align-items-center justify-content-end gap-2">
+    <p-button label="Confirmar" (onClick)="submit()" severity="success" [outlined]="true" styleClass="w-32"></p-button>
+    <p-button label="Fechar" (onClick)="close()" styleClass="d_color"></p-button>
+  </div>
+</div>

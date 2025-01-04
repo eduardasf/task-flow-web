@@ -1,36 +1,33 @@
 import { DatePipe, NgClass } from '@angular/common';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { PageEvent } from '@models/primeng';
+import { Tarefa } from '@models/tarefa';
+import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
+import { DialogService, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { debounceTime, Subject, switchMap } from 'rxjs';
-
-import { PageEvent } from '@models/primeng';
-import { Tarefa } from '@models/tarefa';
-import { ButtonModule } from 'primeng/button';
 import { ListComponent } from "../tarefas/list/list.component";
+import { AddEditTarefaComponent } from "../tarefas/modais/add-edit-tarefa/add-edit-tarefa.component";
 import { HomeService } from './home.service';
 
 @Component({
   selector: 'app-home',
   imports: [
-    DividerModule,
-    IconFieldModule,
-    InputIconModule,
-    InputTextModule,
-    FormsModule,
-    NgClass,
-    PaginatorModule,
-    ListComponent,
-    ButtonModule
+    DividerModule, IconFieldModule,
+    InputIconModule, InputTextModule,
+    FormsModule, NgClass, PaginatorModule,
+    ListComponent, ButtonModule,
+    DynamicDialogModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [HomeService]
+  viewProviders: [HomeService, DialogService]
 })
 export class HomeComponent implements OnInit {
   selected_f: string = 'All';
@@ -39,6 +36,7 @@ export class HomeComponent implements OnInit {
   tarefas: Tarefa[] = [];
   first: number = 0;
   rows: number = 6;
+  ref: DynamicDialogRef | undefined;
 
   searchSubject: Subject<{ value: string | null, selected_f: string }> = new Subject();
 
@@ -52,7 +50,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private dataPipe: DatePipe,
-    private service: HomeService
+    private service: HomeService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -110,7 +109,6 @@ export class HomeComponent implements OnInit {
       this.tarefas = response.data;
       const events = response.pageEvent as PageEvent;
       this.totalRecords = events.total ?? 0;
-      console.log(response);
     });
   }
 
@@ -118,5 +116,17 @@ export class HomeComponent implements OnInit {
     this.first = event.first;
     this.rows = event.rows;
     this.search(this.value, this.selected_f);
+  }
+
+  showDialog() {
+    this.ref = this.dialogService.open(
+      AddEditTarefaComponent, {})
+
+    this.ref.onClose
+      .subscribe((p) => {
+        if (p) {
+          this.search(this.value, this.selected_f);
+        }
+      })
   }
 }
