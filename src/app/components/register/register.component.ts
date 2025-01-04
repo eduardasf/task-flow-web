@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { AuthService } from '../auth/auth.service';
+import { Usuario } from '@models/usuario';
 
 @Component({
   selector: 'app-register',
@@ -25,11 +27,20 @@ export class RegisterComponent {
     password: new FormControl(null, [Validators.required]),
   })
 
+  constructor(
+    private auth: AuthService
+  ){}
+
   login() {
     if (!this.form.valid) {
       return;
     }
-    console.log(this.form.value)
-  }
 
+    const formData = this.form.getRawValue();
+    this.auth.addUsuario(formData).subscribe({
+      next: res => {
+        console.log(res);
+      }
+    })
+  }
 }
