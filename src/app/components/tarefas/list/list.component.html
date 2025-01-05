@@ -49,9 +49,9 @@
         <p class="font-semibold m-0">Após a exclusão, essa ação não poderá ser <br> desfeita!</p>
       </section>
       <div class="flex align-items-center justify-content-end gap-2">
+        <p-button label="Fechar" size="small" (onClick)="onReject()" styleClass="d_color"></p-button>
         <p-button label="Confirmar" size="small" severity="danger" [outlined]="true" (onClick)="onAccept()"
           styleClass="w-32"></p-button>
-        <p-button label="Fechar" size="small" (onClick)="onReject()" styleClass="d_color"></p-button>
       </div>
     </div>
   </ng-template>

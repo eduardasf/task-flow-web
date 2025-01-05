@@ -20,11 +20,11 @@ export class TarefaService {
   }
 
   addTarefa(tarefa: Tarefa) {
-    return this.http_.post(`${this.api}/tarefa`, tarefa);
+    return this.http_.post<any>(`${this.api}/tarefa`, tarefa);
   }
 
   updateTarefa(tarefa: Tarefa) {
-    return this.http_.put(`${this.api}/tarefa`, tarefa);
+    return this.http_.put<any>(`${this.api}/tarefa`, tarefa);
   }
 
 }

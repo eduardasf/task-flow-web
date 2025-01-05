@@ -1,3 +1,5 @@
+import { Usuario } from "./usuario";
+
 export enum Status {
   Pending = "Pending",
   Completed = "Completed",
@@ -11,6 +13,8 @@ export class Tarefa {
   dataValidade: string | Date;
   concluido: boolean;
   status: Status;
+  usuarioId: string;
+  usuario: Usuario;
 
   constructor(t: Tarefa) {
     this.id = t.id;
@@ -19,5 +23,7 @@ export class Tarefa {
     this.dataValidade = t.dataValidade;
     this.concluido = t.concluido;
     this.status = t.status;
+    this.usuario = t.usuario;
+    this.usuarioId = t.usuarioId;
   }
 }

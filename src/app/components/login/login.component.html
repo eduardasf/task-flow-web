@@ -2,17 +2,18 @@
   <section class="flex flex-column gap-3">
     <div class="flex form_ flex-column gap-2">
       <label for="email">Email</label>
-      <input pInputText autocomplete="email" id="email" aria-describedby="username-help" formControlName="email" />
+      <input pInputText autocomplete="on" type="email" id="email" aria-describedby="username-help"
+        formControlName="email" />
     </div>
     <div class="flex form_ flex-column gap-2">
       <label for="password">Senha</label>
       <p-password appendTo="body" id="password" autocomplete="password" formControlName="password" [toggleMask]="true"
         [feedback]="false" />
-      <small [routerLink]="'/register'" id="password" class="link text-right">Não tem cadastro?
+      <small [routerLink]="'/auth/register'" id="password" class="link text-right">Não tem cadastro?
         registre-se.</small>
     </div>
   </section>
 </form>
-<section class="text-center pt-4">
-  <p-button (onClick)="login()" label="Entrar"/>
+<section class="text-center login pt-4">
+  <p-button (onClick)="login()" label="Entrar" />
 </section>

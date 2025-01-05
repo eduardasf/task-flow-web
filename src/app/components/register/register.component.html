@@ -12,10 +12,10 @@
       <label for="password">Senha</label>
       <p-password appendTo="body" id="password" autocomplete="password" formControlName="password" [toggleMask]="true"
         [feedback]="false" />
-      <small [routerLink]="'/login'" id="password" class="link text-right">Já possui cadastro? Faça login</small>
+      <small [routerLink]="'/auth/login'" id="password" class="link text-right">Já possui cadastro? Faça login</small>
     </div>
   </section>
 </form>
-<section class="text-center pt-4">
-  <p-button appendTo="body" (onClick)="login()" label="Cadastrar"/>
+<section class="text-center register pt-4">
+  <p-button appendTo="body" (onClick)="login()" label="Cadastrar" />
 </section>

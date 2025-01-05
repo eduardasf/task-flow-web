@@ -6,6 +6,7 @@ export class PageEvent {
   total: number | undefined;
   globalFilter?: string | null | undefined;
   status?: string;
+  userId!: string;
 
   constructor(init?: Partial<PageEvent>) {
     Object.assign(this, init);

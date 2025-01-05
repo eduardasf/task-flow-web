@@ -22,10 +22,11 @@
   }
 }
 
-section .p-button {
+.login .p-button {
   padding-inline: 10%;
   border-color: #568B63;
   background-color: #568B63;
+
   &:hover {
     border-color: #42724d;
     background-color: #42724d !important;

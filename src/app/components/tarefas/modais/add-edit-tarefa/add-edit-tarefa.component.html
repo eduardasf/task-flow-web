@@ -3,17 +3,29 @@
   <form [formGroup]="form">
     <section class="flex flex-column gap-3 py-4">
       <div class="flex form_ flex-column gap-2">
-        <label for="email">Nome</label>
-        <input pInputText autocomplete="email" id="nome" aria-describedby="username-help" formControlName="nome" />
+        <label for="nome">Nome</label>
+        <input maxlength="150" pInputText autocomplete="nome" id="nome" aria-describedby="nome-help"
+          formControlName="nome" [ngClass]="{'ng-dirty ng-invalid': showError('nome')}" />
+        <small style="color: red;" *ngIf="showError('nome')" id="nome-help">
+          Nome é obrigatório.
+        </small>
       </div>
       <div class="flex form_ flex-column gap-2">
         <label for="descricao">Descrição</label>
-        <textarea id="descricao" rows="5" cols="30" pTextarea formControlName="descricao"></textarea>
+        <textarea maxlength="500" id="descricao" rows="5" cols="30" pTextarea formControlName="descricao"
+          (input)="updateCharacterCount()">
+        </textarea>
+        <small class="text-right font-light">{{ charCount }}/500 caracteres</small>
+
       </div>
       <div class="flex form_ flex-column gap-2">
         <label for="date">Data validade</label>
-        <p-datepicker dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body" id="date" formControlName="dataValidade"
-          inputId="icondisplay" [iconDisplay]="'input'" styleClass="w-full" />
+        <p-datepicker [ngClass]="{'ng-dirty ng-invalid': showError('nome')}" dateFormat="dd/mm/yy" [showIcon]="true"
+          appendTo="body" id="date" formControlName="dataValidade" inputId="icondisplay" [iconDisplay]="'input'"
+          styleClass="w-full" />
+        <small style="color: red;" *ngIf="showError('dataValidade')" id="nome-help">
+          Data validade é obrigatório.
+        </small>
       </div>
       <div class="flex form_ gap-2">
         <p-checkbox formControlName="concluido" [binary]="true" />
@@ -22,7 +34,7 @@
     </section>
   </form>
   <div class="flex align-items-center justify-content-end gap-2">
-    <p-button label="Confirmar" (onClick)="submit()" severity="success" [outlined]="true" styleClass="w-32"></p-button>
-    <p-button label="Fechar" (onClick)="close()" styleClass="d_color"></p-button>
+    <p-button label="Fechar" (onClick)="close()" severity="success" [outlined]="true" styleClass="w-32"></p-button>
+    <p-button label="Confirmar" (onClick)="submit()" styleClass="d_color"></p-button>
   </div>
 </div>

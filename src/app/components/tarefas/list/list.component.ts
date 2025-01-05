@@ -11,6 +11,7 @@ import { DialogService, DynamicDialogModule, DynamicDialogRef } from 'primeng/dy
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import { ToastCustomService } from '../../../shared/toast-custom.service';
 import { AddEditTarefaComponent } from '../modais/add-edit-tarefa/add-edit-tarefa.component';
 import { TarefaService } from '../tarefa.service';
 
@@ -37,7 +38,8 @@ export class ListComponent implements OnInit {
   constructor(
     private tarefaService: TarefaService,
     private confirmationService: ConfirmationService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private alert: ToastCustomService
   ) { }
 
   ngOnInit(): void {
@@ -53,18 +55,18 @@ export class ListComponent implements OnInit {
       .subscribe({
         next: res => {
           if (res) {
-            this.reload()
+            this.reload();
+            this.alert.showMsg('success', 'Tarefa', 'Status da tarefa alterado com sucesso!');
           }
         },
         error: error => {
-          console.error('Erro ao atualizar status:', error);
+          this.alert.showMsg('success', 'Tarefa', 'Erro ao alterar o status da tarefa!');
         }
       }
       );
   }
 
   confirm(event: CheckboxChangeEvent, id: string, isConcluido: boolean) {
-    console.log(event)
     this.confirmationService.confirm({
       target: event.originalEvent?.target as EventTarget,
       message: 'Você tem certeza que deseja prosseguir?',
@@ -130,10 +132,12 @@ export class ListComponent implements OnInit {
     this.tarefaService.delTarefa(id)
       .subscribe({
         next: value => {
-          if (value)
+          if (value) {
+            this.alert.showMsg('success', 'Tarefa', 'Excluida com sucesso!');
             this.reload()
-        }, error(err) {
-          console.error(err);
+          }
+        }, error: err => {
+          this.alert.showMsg('error', 'Tarefa', 'Erro ao excluir a tarefa!');
         },
       })
   }

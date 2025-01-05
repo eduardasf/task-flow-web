@@ -1,6 +1,7 @@
 import { DatePipe, NgClass } from '@angular/common';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PageEvent } from '@models/primeng';
 import { Tarefa } from '@models/tarefa';
 import { ButtonModule } from 'primeng/button';
@@ -10,11 +11,11 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
-import { debounceTime, Subject, switchMap } from 'rxjs';
+import { debounceTime, firstValueFrom, Subject, switchMap } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 import { ListComponent } from "../tarefas/list/list.component";
 import { AddEditTarefaComponent } from "../tarefas/modais/add-edit-tarefa/add-edit-tarefa.component";
 import { HomeService } from './home.service';
-
 @Component({
   selector: 'app-home',
   imports: [
@@ -22,12 +23,12 @@ import { HomeService } from './home.service';
     InputIconModule, InputTextModule,
     FormsModule, NgClass, PaginatorModule,
     ListComponent, ButtonModule,
-    DynamicDialogModule
+    DynamicDialogModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [HomeService, DialogService]
+  viewProviders: [HomeService, DialogService],
 })
 export class HomeComponent implements OnInit {
   selected_f: string = 'All';
@@ -51,31 +52,25 @@ export class HomeComponent implements OnInit {
   constructor(
     private dataPipe: DatePipe,
     private service: HomeService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private router: Router,
+    private auth: AuthService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.search(this.value, this.selected_f);
-
+    const user = await firstValueFrom(this.auth.user$);
+    if (!user) return;
     this.searchSubject.pipe(
       debounceTime(500),
       switchMap(({ value, selected_f }) => {
-        const pageEvent = new PageEvent({
-          first: this.first,
-          rows: this.rows,
-          page: Math.floor(this.first / this.rows) + 1,
-          pageCount: Math.ceil(this.totalRecords / this.rows),
-          globalFilter: value,
-          status: selected_f
-        });
-
+        const pageEvent = this.setEvent(value, selected_f, user.id);
         return this.service.getFilteredTarefas(pageEvent);
       })
     ).subscribe((response) => {
       this.tarefas = response.data;
       const events = response.pageEvent as PageEvent;
       this.totalRecords = events.total ?? 0;
-      console.log(response);
     });
   }
 
@@ -95,20 +90,27 @@ export class HomeComponent implements OnInit {
     return this.dataPipe.transform(today, 'EEEE, dd/MM/yyyy', 'pt-BR');
   }
 
-  search(value: string | null | undefined, selected_f: string) {
-    const pageEvent = new PageEvent({
+  async search(value: string | null | undefined, selected_f: string) {
+    const user = await firstValueFrom(this.auth.user$);
+    if (!user) return;
+    const pageEvent = this.setEvent(value, selected_f, user.id);
+    this.service.getFilteredTarefas(pageEvent).subscribe((response) => {
+      this.tarefas = response.data;
+      const events = response.pageEvent as PageEvent;
+      this.totalRecords = events.total ?? 0;
+    });
+
+  }
+  
+  setEvent(value: string | null | undefined, selected_f: string, idUser: string) {
+    return new PageEvent({
       first: this.first,
       rows: this.rows,
       page: Math.floor(this.first / this.rows) + 1,
       pageCount: Math.ceil(this.totalRecords / this.rows),
       globalFilter: value,
-      status: selected_f
-    });
-
-    this.service.getFilteredTarefas(pageEvent).subscribe((response) => {
-      this.tarefas = response.data;
-      const events = response.pageEvent as PageEvent;
-      this.totalRecords = events.total ?? 0;
+      status: selected_f,
+      userId: idUser
     });
   }
 
@@ -119,14 +121,18 @@ export class HomeComponent implements OnInit {
   }
 
   showDialog() {
-    this.ref = this.dialogService.open(
-      AddEditTarefaComponent, {})
+    const ref: DynamicDialogRef = this.dialogService.open(AddEditTarefaComponent, {});
 
-    this.ref.onClose
-      .subscribe((p) => {
-        if (p) {
-          this.search(this.value, this.selected_f);
-        }
-      })
+    ref.onClose.subscribe((obj: unknown) => {
+      if (obj) {
+        this.search(this.value, this.selected_f);
+      }
+    });
   }
+
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['auth', 'login']);
+  }
+
 }
