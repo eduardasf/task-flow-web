@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GenericResponse, UserResponse } from '@models/response';
+import { Router } from '@angular/router';
+import { GenericResponse, RefreshToken, UserResponse } from '@models/response';
 import { Usuario } from '@models/usuario';
 import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
 import { environment } from '../../env/environments';
@@ -18,7 +19,7 @@ export class AuthService {
   private isUserInitialized = false;
   private attToken = false;
 
-  constructor(private http_: HttpClient) { }
+  constructor(private http_: HttpClient, private router: Router) { }
 
   addUsuario(usuario: unknown) {
     return this.http_.post(`${this.api}/usuario`, usuario);
@@ -118,9 +119,52 @@ export class AuthService {
     return user ? JSON.parse(user) as Usuario : null;
   }
 
-  logout() {
+  logout(): void {
     sessionStorage.clear();
     this.userSubject.next(null);
+    this.isUserInitialized = false;
+    this.router.navigate(['auth', 'login']);
+  }
+
+  isTokenExpired(): boolean {
+    const token = this.getAccessToken();
+    if (!token) { return true };
+
+    const payload = this.decodeToken(token);
+    const expirationDate = new Date(payload?.exp * 1000);
+    return new Date() > expirationDate;
+  }
+
+  private decodeToken(token: string) {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  }
+
+  refreshToken(): Observable<RefreshToken | null> {
+    if (!this.attToken) {
+      this.attToken = true;
+      const email = this.getUserEmail();
+      if (!email) {
+        this.logout();
+        return of(null);
+      }
+      const url = `${environment.API_URL}/auth/refresh-token?email=${encodeURIComponent(email)}`;
+      return this.http_.get<RefreshToken>(url).pipe(
+        tap((token: RefreshToken) => {
+          if (token) {
+            this.setToken(token.refreshToken);
+          }
+          this.attToken = false;
+        }),
+        catchError((error) => {
+          this.attToken = false;
+          this.logout();
+          return throwError(() => error);
+        })
+      );
+    } else {
+      return of(null);
+    }
   }
 
 }

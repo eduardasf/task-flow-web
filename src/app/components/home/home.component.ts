@@ -53,7 +53,6 @@ export class HomeComponent implements OnInit {
     private dataPipe: DatePipe,
     private service: HomeService,
     private dialogService: DialogService,
-    private router: Router,
     private auth: AuthService
   ) { }
 
@@ -132,7 +131,6 @@ export class HomeComponent implements OnInit {
 
   logout() {
     this.auth.logout();
-    this.router.navigate(['auth', 'login']);
   }
 
 }
