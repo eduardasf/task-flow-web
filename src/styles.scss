@@ -29,3 +29,28 @@ label {
   border-color: #568B63 !important;
   color: #568B63 !important;
 }
+
+$breakpoints: (
+  xs: 480px,
+  sm: 768px,
+  md: 992px,
+  lg: 1200px
+);
+
+@mixin breakpoint($breakpoint) {
+  @media (min-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// .auth {
+//   width: 100%;
+
+//   @include breakpoint(sm) {
+//     width: 75%;
+//   }
+
+//   @include breakpoint(md) {
+//     width: 50%;
+//   }
+// }

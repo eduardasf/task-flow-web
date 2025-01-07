@@ -35,6 +35,7 @@ export class ListComponent implements OnInit {
   @Output() notify: EventEmitter<boolean> = new EventEmitter();
   ref: DynamicDialogRef | undefined;
   dell: boolean = false;
+
   constructor(
     private tarefaService: TarefaService,
     private confirmationService: ConfirmationService,
@@ -142,7 +143,7 @@ export class ListComponent implements OnInit {
       })
   }
 
-  edit(data: Tarefa) {
+  edit(data?: Tarefa) {
     this.ref = this.dialogService.open(
       AddEditTarefaComponent, {
       data: data

@@ -1,7 +1,6 @@
-import { DatePipe, NgClass } from '@angular/common';
+import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { PageEvent } from '@models/primeng';
 import { Tarefa } from '@models/tarefa';
 import { ButtonModule } from 'primeng/button';
@@ -23,7 +22,7 @@ import { HomeService } from './home.service';
     InputIconModule, InputTextModule,
     FormsModule, NgClass, PaginatorModule,
     ListComponent, ButtonModule,
-    DynamicDialogModule,
+    DynamicDialogModule, NgIf
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -100,7 +99,7 @@ export class HomeComponent implements OnInit {
     });
 
   }
-  
+
   setEvent(value: string | null | undefined, selected_f: string, idUser: string) {
     return new PageEvent({
       first: this.first,

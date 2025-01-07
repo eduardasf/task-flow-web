@@ -1,37 +1,85 @@
+$breakpoints: (
+  xs: 480px,
+  sm: 768px,
+  md: 992px,
+  lg: 1200px
+);
+
+@mixin breakpoint($breakpoint) {
+  @media (min-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
 .auth {
   background-color: #568B63;
-  background-position: top left;
-  background-size: 33% !important;
+  background-size: 50%;
+  background-position: top center;
   display: flex;
-  justify-content: end;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 
+  @include breakpoint(xs) {
+    background-size: 35%;
+  }
+
+  @include breakpoint(sm) {
+    background-size: 27%;
+  }
+
+  @include breakpoint(md) {
+    background-size: 40%;
+    background-position: top left;
+    justify-content: end;
+  }
+
+  @include breakpoint(lg) {
+    background-size: 30%;
+  }
 
   .form_part {
-    width: 70%;
+    width: 100%;
+    padding: 1rem 0;
     display: flex;
     justify-content: center;
-    align-items: center;
 
-    .form_login {
-      width: 35%;
-      border-radius: .35rem;
-      color: black;
-      background-color: #E8F2EB;
+    @include breakpoint(md) {
+      width: 50%;
+    }
+  }
 
-      .form_ {
-        width: 100%;
-        font-size: 1.25rem;
+  .form_login {
+    width: 100%;
+    border-radius: .35rem;
+    color: black;
+    background-color: #E8F2EB;
+    padding: 1.75rem 1.25rem;
+
+    .link {
+      color: #44A3DE;
+      font-size: .75rem;
+      cursor: pointer;
+
+      &:hover {
+        color: #2c6a91;
       }
+    }
 
-      .link {
-        color: #44A3DE;
-        font-size: .75rem;
-        cursor: pointer;
+    @include breakpoint(xs) {
+      width: 70%;
+    }
 
-        &:hover {
-          color: #2c6a91;
-        }
-      }
+    @include breakpoint(sm) {
+      width: 50%;
+    }
+
+    @include breakpoint(md) {
+      width: 70%;
+    }
+
+    @include breakpoint(lg) {
+      width: 50%;
     }
   }
 }

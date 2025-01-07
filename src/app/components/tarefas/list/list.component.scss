@@ -50,3 +50,25 @@
     background-color: #42724d !important;
   }
 }
+
+.no_task {
+  height: calc(100dvh - 115px);
+  background: no-repeat;
+  background-position: bottom right;
+  background-size: 25rem;
+  gap: .5rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.add .p-button {
+  border-color: #568B63;
+  background-color: #568B63;
+
+  &:hover {
+    border-color: #42724d;
+    background-color: #42724d !important;
+  }
+}

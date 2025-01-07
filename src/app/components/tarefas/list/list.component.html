@@ -1,6 +1,6 @@
 <p-confirmpopup *ngIf="!dell" />
+@for (t of tarefas; track $index) {
 <section class="w-full grid-container">
-  @for (t of tarefas; track $index) {
   <section class="card_ shadow-2">
     <section class="flex flex-column gap-3">
       <span class="txt_default text-center text-xl font-semibold" [pTooltip]="t.nome.length > 30 ? t.nome : ''">
@@ -33,12 +33,15 @@
       </section>
     </section>
   </section>
-  } @empty {
-  <section class="w-full h-full flex justify-content-center align-items-center">
-    <!-- <P>I Love Duda</P> -->
-  </section>
-  }
 </section>
+} @empty {
+<section class="w-full no_task flex flex-column justify-content-center align-items-center"
+  [style.background-image]="'url(/assets/svg/no_task.svg)'">
+  <p class="txt_default text-5xl font-bold">Nenhuma tarefa encontrada!</p>
+  <p class="txt_default text-3xl font-medium">Clique no botão abaixo para adicionar uma nova tarefa.</p>
+  <p-button class="add mt-4" label="Adicionar Tarefa" icon="pi pi-plus" severity="success" (click)="edit()"></p-button>
+</section>
+}
 
 <p-confirmdialog appendTo="body" *ngIf="dell" #cd>
   <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
