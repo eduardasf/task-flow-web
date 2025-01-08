@@ -1,11 +1,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { ToastCustomService } from '../../shared/toast-custom.service';
 import { AuthService } from '../auth/auth.service';
-import { Usuario } from '@models/usuario';
 
 @Component({
   selector: 'app-register',
@@ -28,8 +28,10 @@ export class RegisterComponent {
   })
 
   constructor(
-    private auth: AuthService
-  ){}
+    private auth: AuthService,
+    private alert: ToastCustomService,
+    private router: Router
+  ) { }
 
   login() {
     if (!this.form.valid) {
@@ -38,9 +40,14 @@ export class RegisterComponent {
 
     const formData = this.form.getRawValue();
     this.auth.addUsuario(formData).subscribe({
-      next: res => {
-        console.log(res);
+      next: () => {
+        this.alert.showMsg('success', 'Usuário', 'Cadastro realizado com sucesso!');
+        this.router.navigate(['auth', 'login'], { queryParams: { email: formData.email } });
+      },
+      error: () => {
+        this.alert.showMsg('error', 'Usuário', 'Erro ao tentar realizar o cadastro. Por favor, tente novamente.');
       }
-    })
+    });
   }
+
 }

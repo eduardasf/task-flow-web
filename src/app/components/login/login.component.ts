@@ -1,9 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { ToastCustomService } from '../../shared/toast-custom.service';
 import { AuthService } from '../auth/auth.service';
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ import { AuthService } from '../auth/auth.service';
   styleUrl: './login.component.scss',
   encapsulation: ViewEncapsulation.None
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  loading: boolean = false;
   form = new FormGroup({
     email: new FormControl(null, [Validators.required]),
     password: new FormControl(null, [Validators.required]),
@@ -27,11 +29,26 @@ export class LoginComponent {
 
   constructor(
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private alert: ToastCustomService
   ) { }
 
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const email = params['email'];
+      console.log('Username recebido:', params);
+      if (email) {
+        this.form.get('email')?.setValue(email);
+        this.form.get('email')?.disable();
+      }
+    });
+  }
+
   login() {
+    this.loading = true;
     if (!this.form.valid) {
+      this.loading = false;
       return;
     }
 
@@ -42,12 +59,16 @@ export class LoginComponent {
           this.auth.user$
             .subscribe(u => {
               if (u) {
-                this.router.navigate(['']);
+                this.loading = false;
+                setTimeout(() => {
+                  this.router.navigate(['']);
+                }, 500)
               }
             })
         },
         error: (err) => {
-          console.error('Erro ao fazer login:', err);
+          this.loading = false;
+          this.alert.showMsg('warn', 'Login', 'Erro ao realizar o login!' + err);
         },
       });
   }

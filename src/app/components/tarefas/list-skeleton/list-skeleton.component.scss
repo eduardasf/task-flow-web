@@ -1,0 +1,11 @@
+.skel_card {
+  width: calc(100% / 3 - 2rem);
+  background-color: white;
+  border-radius: 3px;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.list_skel {
+  gap: 3rem 2rem;
+}

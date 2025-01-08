@@ -43,14 +43,6 @@ $breakpoints: (
   }
 }
 
-// .auth {
-//   width: 100%;
-
-//   @include breakpoint(sm) {
-//     width: 75%;
-//   }
-
-//   @include breakpoint(md) {
-//     width: 50%;
-//   }
-// }
+.p-skeleton {
+  --p-skeleton-background: linear-gradient(90deg, #568b63, #6ba475);
+}

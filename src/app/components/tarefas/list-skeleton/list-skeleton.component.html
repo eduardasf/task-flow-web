@@ -1,0 +1,29 @@
+<section class="flex flex-wrap justify-content-between list_skel">
+  @for (item of [].constructor(6); track $index) {
+  <div class="skel_card flex flex-column">
+    <div class="flex justify-content-center">
+      <p-skeleton width="15rem" height="1.75rem" />
+    </div>
+    <section class="flex flex-column gap-2">
+      <p-skeleton width="10rem" height="1.25rem" />
+      <p-skeleton *ngFor="let i of [].constructor(3)" width="100%" />
+      <p-skeleton width="80%" />
+    </section>
+    <section class="flex flex-column gap-2">
+      <p-skeleton width="10rem" />
+      <p-skeleton width="7rem" />
+    </section>
+    <section class="flex align-items-center gap-2">
+      <p-skeleton width="1.5rem" height="1.5rem" />
+      <p-skeleton width="7rem" />
+    </section>
+    <section class="flex align-items-center justify-content-between">
+      <p-skeleton width="5rem" height="2rem" />
+      <section class="flex gap-2">
+        <p-skeleton width="2rem" height="2rem" />
+        <p-skeleton width="2rem" height="2rem" />
+      </section>
+    </section>
+  </div>
+  }
+</section>

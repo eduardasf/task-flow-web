@@ -1,8 +1,9 @@
 import { DatePipe, NgClass, NgIf } from '@angular/common';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PageEvent } from '@models/primeng';
 import { Tarefa } from '@models/tarefa';
+import { Usuario } from '@models/usuario';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { DialogService, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -10,11 +11,14 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
-import { debounceTime, firstValueFrom, Subject, switchMap } from 'rxjs';
+import { SkeletonModule } from 'primeng/skeleton';
+import { debounceTime, first, Observable, Subject, switchMap } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { ListSkeletonComponent } from "../tarefas/list-skeleton/list-skeleton.component";
 import { ListComponent } from "../tarefas/list/list.component";
 import { AddEditTarefaComponent } from "../tarefas/modais/add-edit-tarefa/add-edit-tarefa.component";
 import { HomeService } from './home.service';
+
 @Component({
   selector: 'app-home',
   imports: [
@@ -22,7 +26,8 @@ import { HomeService } from './home.service';
     InputIconModule, InputTextModule,
     FormsModule, NgClass, PaginatorModule,
     ListComponent, ButtonModule,
-    DynamicDialogModule, NgIf
+    DynamicDialogModule, NgIf, SkeletonModule,
+    ListSkeletonComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -37,8 +42,13 @@ export class HomeComponent implements OnInit {
   first: number = 0;
   rows: number = 6;
   ref: DynamicDialogRef | undefined;
+  loading = {
+    date: true,
+    cards: true
+  }
 
   searchSubject: Subject<{ value: string | null, selected_f: string }> = new Subject();
+  user$: Observable<Usuario | null>;
 
   f_status = [
     { type: 'All', title: 'Todas as tarefas' },
@@ -47,29 +57,47 @@ export class HomeComponent implements OnInit {
     { type: 'Overdue', title: 'Atrasadas' },
   ];
 
-
   constructor(
-    private dataPipe: DatePipe,
+    private auth: AuthService,
     private service: HomeService,
     private dialogService: DialogService,
-    private auth: AuthService
-  ) { }
+    private cdr: ChangeDetectorRef,
+    private datepipe: DatePipe
+  ) {
+    this.user$ = this.auth.user$;
+  }
 
-  async ngOnInit(): Promise<void> {
-    this.search(this.value, this.selected_f);
-    const user = await firstValueFrom(this.auth.user$);
-    if (!user) return;
-    this.searchSubject.pipe(
-      debounceTime(500),
-      switchMap(({ value, selected_f }) => {
-        const pageEvent = this.setEvent(value, selected_f, user.id);
-        return this.service.getFilteredTarefas(pageEvent);
-      })
-    ).subscribe((response) => {
-      this.tarefas = response.data;
-      const events = response.pageEvent as PageEvent;
-      this.totalRecords = events.total ?? 0;
+  ngOnInit(): void {
+    this.user$.subscribe((user) => {
+      if (!user) return;
+      this.searchSubject
+        .pipe(
+          debounceTime(500),
+          switchMap(({ value, selected_f }) => {
+            this.loading.cards = true;
+            return this.service.getFilteredTarefas(
+              this.setEvent(value, selected_f, user.id)
+            )
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            this.tarefas = response.data;
+            const events = response.pageEvent as PageEvent;
+            this.totalRecords = events.total ?? 0;
+            setTimeout(() => {
+              this.loading.cards = false;
+              this.cdr.detectChanges();
+            }, 500);
+          },
+          error: (err) => {
+            this.loading.cards = false;
+            console.error('Erro ao buscar tarefas:', err);
+          },
+        });
     });
+    this.search(this.value, this.selected_f);
+    this.loading.date = false;
   }
 
   setFilter(f: string) {
@@ -85,20 +113,39 @@ export class HomeComponent implements OnInit {
 
   getDate() {
     const today = new Date();
-    return this.dataPipe.transform(today, 'EEEE, dd/MM/yyyy', 'pt-BR');
+    return this.datepipe.transform(today, 'EEEE, dd/MM/yyyy', 'pt-BR');
   }
 
-  async search(value: string | null | undefined, selected_f: string) {
-    const user = await firstValueFrom(this.auth.user$);
-    if (!user) return;
-    const pageEvent = this.setEvent(value, selected_f, user.id);
-    this.service.getFilteredTarefas(pageEvent).subscribe((response) => {
-      this.tarefas = response.data;
-      const events = response.pageEvent as PageEvent;
-      this.totalRecords = events.total ?? 0;
-    });
-
+  search(value: string | null | undefined, selected_f: string): void {
+    this.user$
+      .pipe(
+        first(),
+        switchMap((user) => {
+          if (!user) {
+            console.error('User not found');
+            return [];
+          }
+          this.loading.cards = true;
+          const pageEvent = this.setEvent(value, selected_f, user.id);
+          return this.service.getFilteredTarefas(pageEvent);
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          this.tarefas = response.data;
+          const events = response.pageEvent as PageEvent;
+          this.totalRecords = events.total ?? 0;
+          setTimeout(() => {
+            this.loading.cards = false
+          }, 500);
+        },
+        error: (err) => {
+          this.loading.cards = false;
+          console.error('Erro ao buscar tarefas:', err);
+        },
+      });
   }
+
 
   setEvent(value: string | null | undefined, selected_f: string, idUser: string) {
     return new PageEvent({

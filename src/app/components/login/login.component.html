@@ -2,8 +2,8 @@
   <section class="flex flex-column gap-3">
     <div class="flex form_ flex-column gap-2">
       <label for="email">Email</label>
-      <input pInputText autocomplete="on" type="email" id="email" aria-describedby="username-help"
-        formControlName="email" />
+      <input [disabled]="form.controls['email'].disabled" pInputText autocomplete="on" type="email" id="email"
+        aria-describedby="username-help" formControlName="email" />
     </div>
     <div class="flex form_ flex-column gap-2">
       <label for="password">Senha</label>
@@ -15,5 +15,5 @@
   </section>
 </form>
 <section class="text-center login pt-4">
-  <p-button (onClick)="login()" label="Entrar" />
+  <p-button [loading]="loading" [disabled]="form.invalid" (onClick)="login()" label="Entrar" />
 </section>

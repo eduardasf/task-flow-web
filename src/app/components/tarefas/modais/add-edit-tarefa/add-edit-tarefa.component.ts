@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Tarefa } from '@models/tarefa';
 import { ButtonModule } from 'primeng/button';
@@ -26,8 +26,8 @@ import { TarefaService } from '../../tarefa.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AddEditTarefaComponent implements OnInit {
-  @Input() visible: boolean = false;
-  @Output() visibleChange = new EventEmitter<boolean>();
+
+  loading: boolean = false;
   charCount: number = 0;
 
 
@@ -54,7 +54,7 @@ export class AddEditTarefaComponent implements OnInit {
     if (data) {
       this.form.patchValue({
         ...data,
-        dataValidade: data.dataValidade ? new Date(data.dataValidade) : new Date()
+        dataValidade: data.dataValidade ? new Date(data.dataValidade) : null
       });
     }
     this.form.patchValue({
@@ -64,11 +64,7 @@ export class AddEditTarefaComponent implements OnInit {
   }
 
   submit() {
-    if (this.form.invalid) {
-      this.toast.showMsg('warn', 'Tarefa', 'Preencha todos os campos obrigatorios!');
-      return;
-    }
-
+    this.loading = true;
     const formData = this.form.getRawValue();
     if (formData.dataValidade) {
       formData.dataValidade = new Date(formData.dataValidade).toISOString();
@@ -89,15 +85,18 @@ export class AddEditTarefaComponent implements OnInit {
           'Tarefa',
           (formData.id ? 'Editada' : 'Criada') + ' com sucesso!'
         );
-        this.dialog.close(value);
+        this.loading = false;
+        setTimeout(() => {
+          this.dialog.close(value);
+        }, 500);
       },
       error: err => {
+        this.loading = false;
         this.toast.showMsg(
           'error',
           'Tarefa',
           'Erro ao ' + (formData.id ? 'editar' : 'criar') + ' a tarefa!'
         );
-        // this.dialog.close();
       }
     });
 

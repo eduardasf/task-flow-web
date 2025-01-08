@@ -33,13 +33,17 @@
   </section>
   <section class="content w-full h-full px-4">
     <section class="flex justify-content-end gap-2 align-items-end">
-      <span class="txt_default text-sm">{{getDate()}}</span>
+      <p-skeleton *ngIf="loading.date" class="w-2" />
+      <span *ngIf="!loading.date" class="txt_default text-sm">{{getDate()}}</span>
       <img src="assets/default.png" class="h-7rem" />
     </section>
     <section class="pagin">
       <section class="flex h-full flex-column gap-2">
-        <p-button class="add" *ngIf="tarefas.length > 0" icon="pi pi-plus" severity="success" (click)="showDialog()" />
-        <app-list [tarefas]="tarefas" (notify)="search(value, selected_f)" />
+        <p-button class="add" *ngIf="tarefas.length > 0 && !loading.date" icon="pi pi-plus" severity="success"
+          (click)="showDialog()" />
+        <p-skeleton *ngIf="loading.date" width="2.5rem" height="2rem" />
+        <app-list *ngIf="!loading.cards" [tarefas]="tarefas" (notify)="search(value, selected_f)" />
+        <app-list-skeleton *ngIf="loading.cards" />
       </section>
       <p-paginator *ngIf="tarefas.length > 0" appendTo="body" (onPageChange)="onPageChange($event)" [first]="first"
         [rows]="rows" [totalRecords]="totalRecords" />
