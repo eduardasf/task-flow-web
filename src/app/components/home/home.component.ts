@@ -97,7 +97,9 @@ export class HomeComponent implements OnInit {
         });
     });
     this.search(this.value, this.selected_f);
-    this.loading.date = false;
+    setTimeout(() => {
+      this.loading.date = false;
+    }, 500)
   }
 
   setFilter(f: string) {

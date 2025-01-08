@@ -1,4 +1,4 @@
-import { DatePipe, NgIf, SlicePipe } from '@angular/common';
+import { DatePipe, NgClass, NgIf, SlicePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Status, Tarefa } from '@models/tarefa';
@@ -23,7 +23,7 @@ import { TarefaService } from '../tarefa.service';
     ScrollPanelModule, TooltipModule,
     SlicePipe, ConfirmPopupModule,
     TagModule, DynamicDialogModule,
-    ConfirmDialogModule, NgIf
+    ConfirmDialogModule, NgIf, NgClass
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',

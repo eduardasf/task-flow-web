@@ -1,5 +1,6 @@
 <p-confirmpopup *ngIf="!dell" />
-<section *ngIf="tarefas.length > 0" class="w-full grid-container">
+<section *ngIf="tarefas.length > 0" class="w-full grid-container"
+  [ngClass]="tarefas.length >= 3 ? 'justify-content-between' : 'gap-5'">
   @for (t of tarefas; track $index) {
   <section class="card_ shadow-2">
     <section class="flex flex-column gap-3">
