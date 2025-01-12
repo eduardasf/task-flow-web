@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
         },
         error: (err) => {
           this.loading = false;
-          this.alert.showMsg('warn', 'Login', 'Erro ao realizar o login!' + err);
+          this.alert.showMsg('warn', 'Login', 'Erro ao realizar o login! ' + err.error.message);
         },
       });
   }

@@ -1,0 +1,17 @@
+<div class="modal__ txt_default f-inter">
+  <span class="title font-semibold text-2xl">Dados Pessoais</span>
+  <section class="flex flex-column gap-3 py-4">
+    <div class="flex flex-column gap-2">
+      <span class="font-semibold">Nome</span>
+      <p class="m-0">{{usr.name}}</p>
+    </div>
+    <div class="flex flex-column gap-2">
+      <span class="font-semibold">Email</span>
+      <p class="m-0">{{usr.email}}</p>
+    </div>
+  </section>
+  <div class="flex align-items-center justify-content-end gap-2">
+    <p-button label="Fechar" (onClick)="close()" severity="success" [outlined]="true" styleClass="w-32"></p-button>
+    <p-button label="Alterar senha ?" (onClick)="editPass()" styleClass="d_color"></p-button>
+  </div>
+</div>

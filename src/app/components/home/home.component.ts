@@ -14,6 +14,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
 import { debounceTime, first, Observable, Subject, switchMap } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { ModalUserPassComponent } from '../modais/modal-user-pass/modal-user-pass.component';
+import { ModalUserComponent } from '../modais/modal-user/modal-user.component';
 import { ListSkeletonComponent } from "../tarefas/list-skeleton/list-skeleton.component";
 import { ListComponent } from "../tarefas/list/list.component";
 import { AddEditTarefaComponent } from "../tarefas/modais/add-edit-tarefa/add-edit-tarefa.component";
@@ -92,14 +94,13 @@ export class HomeComponent implements OnInit {
           },
           error: (err) => {
             this.loading.cards = false;
-            console.error('Erro ao buscar tarefas:', err);
           },
         });
     });
     this.search(this.value, this.selected_f);
     setTimeout(() => {
       this.loading.date = false;
-    }, 500)
+    }, 500);
   }
 
   setFilter(f: string) {
@@ -177,8 +178,19 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  showPerfil() {
+    const ref: DynamicDialogRef = this.dialogService.open(ModalUserComponent, { showHeader: true });
+
+    ref.onClose.subscribe((obj: boolean) => {
+      if (obj) {
+        setTimeout(() => {
+          const ref: DynamicDialogRef = this.dialogService.open(ModalUserPassComponent, {});
+        }, 500);
+      }
+    });
+  }
+
   logout() {
     this.auth.logout();
   }
-
 }

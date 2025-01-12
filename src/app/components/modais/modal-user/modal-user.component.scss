@@ -1,0 +1,24 @@
+.modal__ {
+  background: #E8F2EB;
+  border-radius: 12px;
+  width: 25rem;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+
+  .title {
+    border-bottom: 1px solid #568B63;
+  }
+
+}
+
+.d_color {
+  border-color: #568B63 !important;
+  background-color: #568B63 !important;
+
+  &:hover {
+    border-color: #42724d;
+    background-color: #42724d !important;
+  }
+}

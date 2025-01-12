@@ -46,3 +46,11 @@ $breakpoints: (
 .p-skeleton {
   --p-skeleton-background: linear-gradient(90deg, #568b63, #6ba475);
 }
+
+.p-password {
+  width: 100%;
+
+  input {
+    width: 100%;
+  }
+}

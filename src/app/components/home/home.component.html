@@ -15,18 +15,19 @@
           <p class="font-semibold text-xl">Filtros de tarefas</p>
           @for (f of f_status; track $index) {
           <p [ngClass]="{'font-bold': selected_f === f.type}" class="cursor-pointer" (click)="setFilter(f.type)">
-            {{f.title}}</p>
+            {{f.title}}
+          </p>
           }
         </section>
       </section>
     </section>
-    <section class="text-xl flex flex-column gap-2">
-      <span>
-        <i class="bi bi-person-circle"></i>
+    <section class="text-xl flex flex-column gap-3">
+      <span class="cursor-pointer" (click)="showPerfil()">
+        <i class="bi bi-person-circle pr-2"></i>
         Perfil
       </span>
       <span class="cursor-pointer" (click)="logout()">
-        <i class="bi bi-arrow-right-square-fill"></i>
+        <i class="bi pr-2 bi-arrow-right-square-fill"></i>
         Sair
       </span>
     </section>

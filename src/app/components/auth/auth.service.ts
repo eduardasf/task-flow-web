@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { GenericResponse, RefreshToken, UserResponse } from '@models/response';
+import { GenericResponse, RefreshToken, UpdatePass, UserResponse } from '@models/response';
 import { Usuario } from '@models/usuario';
 import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
 import { environment } from '../../env/environments';
@@ -165,6 +165,10 @@ export class AuthService {
     } else {
       return of(null);
     }
+  }
+
+  updatePass(form: UpdatePass){
+    return this.http_.patch<GenericResponse>(`${environment.API_URL}/usuario/update-password`, form);
   }
 
 }

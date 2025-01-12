@@ -1,0 +1,38 @@
+<div class="modal__ txt_default f-inter">
+  <span class="title font-semibold text-2xl">Aterar Senha</span>
+  <form [formGroup]="form">
+    <section class="flex flex-column gap-3 py-4">
+      <div class="flex form_ flex-column gap-2">
+        <label for="email">Email</label>
+        <input pInputText autocomplete="nome" id="email" aria-describedby="email-help" formControlName="email"
+          [ngClass]="{'ng-dirty ng-invalid': showError('email')}" />
+        <small style="color: red;" *ngIf="showError('email')" id="email-help">
+          Email é obrigatório.
+        </small>
+      </div>
+      <div class="flex form_ flex-column gap-2">
+        <label for="nome">Senha atual</label>
+        <p-password appendTo="body" id="senhaAtual" autocomplete="senhaAtual" formControlName="senhaAtual" [toggleMask]="true"
+          [feedback]="false" [ngClass]="{'ng-dirty ng-invalid': showError('senhaAtual')}"
+          aria-describedby="senhaAtual-help" />
+        <small style="color: red;" *ngIf="showError('senhaAtual')" id="senhaAtual-help">
+          Senha é obrigatório.
+        </small>
+      </div>
+      <div class="flex form_ flex-column gap-2">
+        <label for="senhaNova">Senha nova</label>
+        <p-password appendTo="body" id="senhaNova" autocomplete="senhaNova" formControlName="senhaNova"
+          [toggleMask]="true" [feedback]="false" [ngClass]="{'ng-dirty ng-invalid': showError('senhaNova')}"
+          aria-describedby="senhaNova-help" />
+        <small style="color: red;" *ngIf="showError('senhaNova')" id="senhaNova-help">
+          Senha é obrigatório.
+        </small>
+      </div>
+    </section>
+  </form>
+  <div class="flex align-items-center justify-content-end gap-2">
+    <p-button label="Fechar" (onClick)="close()" severity="success" [outlined]="true" styleClass="w-32"></p-button>
+    <p-button [loading]="loading" [disabled]="form.invalid" label="Confirmar" (onClick)="submit()"
+      styleClass="d_color"></p-button>
+  </div>
+</div>

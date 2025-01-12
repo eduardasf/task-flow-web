@@ -29,3 +29,14 @@ export class RefreshToken {
     this.refreshToken = obj.refreshToken
   }
 }
+export class UpdatePass {
+  email: string;
+  senhaAtual: string
+  senhaNova: string
+
+  constructor(obj: UpdatePass) {
+    this.email = obj.email;
+    this.senhaAtual = obj.senhaAtual;
+    this.senhaNova = obj.senhaNova;
+  }
+}
