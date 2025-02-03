@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.loading = true;
     if (!this.form.valid) {
+      this.alert.showMsg('error', 'Usuário', 'Por favor, preencha todos os campos obrigatórios para continuar.');
       this.loading = false;
       return;
     }
@@ -68,7 +69,7 @@ export class LoginComponent implements OnInit {
         },
         error: (err) => {
           this.loading = false;
-          this.alert.showMsg('warn', 'Login', 'Erro ao realizar o login! ' + err.error.message);
+          this.alert.showMsg('warn', 'Login', err.error.message);
         },
       });
   }

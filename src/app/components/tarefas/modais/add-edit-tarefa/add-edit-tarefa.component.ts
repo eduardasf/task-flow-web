@@ -64,6 +64,7 @@ export class AddEditTarefaComponent implements OnInit {
   }
 
   submit() {
+    this.form.markAllAsTouched();
     this.loading = true;
     const formData = this.form.getRawValue();
     if (formData.dataValidade) {
@@ -83,7 +84,7 @@ export class AddEditTarefaComponent implements OnInit {
         this.toast.showMsg(
           'success',
           'Tarefa',
-          (formData.id ? 'Editada' : 'Criada') + ' com sucesso!'
+          (formData.id ? 'Atualizada' : 'Criada') + ' com sucesso!'
         );
         this.loading = false;
         setTimeout(() => {

@@ -35,14 +35,19 @@ export class RegisterComponent {
 
   login() {
     if (!this.form.valid) {
+      this.alert.showMsg('error', 'Usuário', 'Por favor, preencha todos os campos obrigatórios para continuar.');
       return;
     }
 
     const formData = this.form.getRawValue();
     this.auth.addUsuario(formData).subscribe({
-      next: () => {
-        this.alert.showMsg('success', 'Usuário', 'Cadastro realizado com sucesso!');
-        this.router.navigate(['auth', 'login'], { queryParams: { email: formData.email } });
+      next: (res) => {
+        if (res.success) {
+          this.alert.showMsg('success', 'Usuário', 'Cadastro realizado com sucesso!');
+          this.router.navigate(['auth', 'login'], { queryParams: { email: formData.email } });
+        } else {
+          this.alert.showMsg('warn', 'Usuário', res.message);
+        }
       },
       error: () => {
         this.alert.showMsg('error', 'Usuário', 'Erro ao tentar realizar o cadastro. Por favor, tente novamente.');

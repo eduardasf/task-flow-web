@@ -22,7 +22,7 @@ export class AuthService {
   constructor(private http_: HttpClient, private router: Router) { }
 
   addUsuario(usuario: unknown) {
-    return this.http_.post(`${this.api}/usuario`, usuario);
+    return this.http_.post<GenericResponse>(`${this.api}/usuario`, usuario);
   }
 
   private handleError(error: unknown): Observable<never> {
